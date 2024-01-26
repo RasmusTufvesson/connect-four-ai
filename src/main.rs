@@ -11,10 +11,20 @@ fn main() {
         input_string.clear();
         io::stdin().read_line(&mut input_string).unwrap();
         let column = input_string.trim().parse().unwrap();
-        game.make_move(column);
-        if game.win(game.turn.opposite()) {
-            println!("Win");
-            game.clear();
+        match game.make_move(column) {
+            board::MoveResult::Win => {
+                println!("Win");
+                game.clear();
+            }
+            board::MoveResult::Draw => {
+                println!("Draw");
+                game.clear();
+            }
+            board::MoveResult::None => {
+                game.print();
+            }
         }
+        let ai_move = ai::best_move(&mut game);
+        game.make_move(ai_move);
     }
 }

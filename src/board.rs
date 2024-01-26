@@ -15,6 +15,12 @@ impl Color {
     }
 }
 
+pub enum MoveResult {
+    None,
+    Win,
+    Draw,
+}
+
 pub struct Board {
     board: [Color; 42],
     pub turn: Color,
@@ -29,7 +35,7 @@ impl Board {
         self.board.fill(Color::Empty);
     }
 
-    pub fn make_move(&mut self, column: usize) {
+    pub fn make_move(&mut self, column: usize) -> MoveResult {
         let mut cur_index = column;
         loop {
             let next_index = cur_index + 7;
@@ -42,7 +48,9 @@ impl Board {
             cur_index = next_index;
         };
         self.board[cur_index] = self.turn;
+        let result = self.get_result();
         self.switch_turn();
+        result
     }
 
     fn position_to_index(&self, x: usize, y: usize) -> usize {
@@ -87,7 +95,7 @@ impl Board {
         println!("{}", lines.join("\n"));
     }
 
-    pub fn win(&self, color: Color) -> bool {
+    fn win(&self, color: Color) -> bool {
         // check diagonals
         for x in 0..4 {
             'diag: for y in 0..3 {
@@ -134,5 +142,24 @@ impl Board {
 
         // everything passed
         false
+    }
+
+    fn draw(&self) -> bool {
+        for x in 0..7 {
+            if self.can_make_move(x) {
+                return false;
+            }
+        }
+        true
+    }
+
+    fn get_result(&self) -> MoveResult {
+        if self.win(self.turn) {
+            return MoveResult::Win;
+        } else if self.draw() {
+            return MoveResult::Draw;
+        } else {
+            return MoveResult::None;
+        }
     }
 }

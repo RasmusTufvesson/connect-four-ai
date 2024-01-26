@@ -1,9 +1,9 @@
-use crate::board::{Board, Color};
+use crate::board::Board;
 
-pub fn best_move(board: Board, color: Color) -> usize {
-    best_move_search(board, color, 5)
+pub fn best_move(board: &mut Board) -> usize {
+    best_move_search(board, 5)
 }
 
-fn best_move_search(board: Board, color: Color, depth: u8) -> usize {
+fn best_move_search(board: &mut Board, depth: u8) -> usize {
     0
 }
