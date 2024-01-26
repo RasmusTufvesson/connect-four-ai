@@ -22,7 +22,7 @@ pub enum MoveResult {
 }
 
 pub struct Board {
-    board: [Color; 42],
+    pub board: [Color; 42],
     pub turn: Color,
 }
 
@@ -53,7 +53,7 @@ impl Board {
         result
     }
 
-    fn position_to_index(&self, x: usize, y: usize) -> usize {
+    pub fn position_to_index(&self, x: usize, y: usize) -> usize {
         x + y * 7
     }
 
@@ -63,12 +63,14 @@ impl Board {
 
     pub fn unmake_move(&mut self, column: usize) {
         let mut cur_index = self.position_to_index(column, 0);
-        while cur_index < 42 {
-            cur_index += 7;
-            if self.board[cur_index] != Color::Empty {
-                break;
+        if self.board[cur_index] == Color::Empty {
+            while cur_index < 42 {
+                cur_index += 7;
+                if self.board[cur_index] != Color::Empty {
+                    break;
+                }
             }
-        };
+        }
         self.board[cur_index] = Color::Empty;
         self.switch_turn();
     }
@@ -129,7 +131,7 @@ impl Board {
                 return true;
             }
         }
-        for x in 0..3 {
+        for x in 0..4 {
             'straight: for y in 0..6 {
                 for square in 0..4 {
                     if self.board[self.position_to_index(x + square, y)] != color {
