@@ -12,5 +12,9 @@ fn main() {
         io::stdin().read_line(&mut input_string).unwrap();
         let column = input_string.trim().parse().unwrap();
         game.make_move(column);
+        if game.win(game.turn.opposite()) {
+            println!("Win");
+            game.clear();
+        }
     }
 }

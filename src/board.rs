@@ -6,7 +6,7 @@ pub enum Color {
 }
 
 impl Color {
-    fn opposite(&self) -> Self {
+    pub fn opposite(&self) -> Self {
         match self {
             Self::Empty => Self::Empty,
             Self::Blue => Self::Red,
@@ -17,7 +17,7 @@ impl Color {
 
 pub struct Board {
     board: [Color; 42],
-    turn: Color,
+    pub turn: Color,
 }
 
 impl Board {
@@ -85,5 +85,54 @@ impl Board {
         }
         lines.push(line.join(" "));
         println!("{}", lines.join("\n"));
+    }
+
+    pub fn win(&self, color: Color) -> bool {
+        // check diagonals
+        for x in 0..4 {
+            'diag: for y in 0..3 {
+                for square in 0..4 {
+                    if self.board[self.position_to_index(x + square, y + square)] != color {
+                        continue 'diag;
+                    }
+                }
+                return true;
+            }
+        }
+        for x in 3..7 {
+            'diag: for y in 0..3 {
+                for square in 0..4 {
+                    if self.board[self.position_to_index(x - square, y + square)] != color {
+                        continue 'diag;
+                    }
+                }
+                return true;
+            }
+        }
+
+        // check straights
+        for x in 0..7 {
+            'straight: for y in 0..3 {
+                for square in 0..4 {
+                    if self.board[self.position_to_index(x, y + square)] != color {
+                        continue 'straight;
+                    }
+                }
+                return true;
+            }
+        }
+        for x in 0..3 {
+            'straight: for y in 0..6 {
+                for square in 0..4 {
+                    if self.board[self.position_to_index(x + square, y)] != color {
+                        continue 'straight;
+                    }
+                }
+                return true;
+            }
+        }
+
+        // everything passed
+        false
     }
 }
