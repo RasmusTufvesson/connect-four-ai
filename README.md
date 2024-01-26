@@ -2,7 +2,7 @@
 This is just a small AI I wrote in rust for connect 4.
 
 ## Todo
-* Use bitboards for the whole position and player pieces
+* Use bitboards for the whole position and player pieces, opponent pieces gotten from xoring them
 * Add transposition table so that board values are cached, unique keys from bitboards added together
 * Add variable time searches with iterative deepening
 * Extend searches in good positions
